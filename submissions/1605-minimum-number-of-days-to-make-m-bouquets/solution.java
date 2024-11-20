@@ -1,42 +1,40 @@
 class Solution {
     public int minDays(int[] bloomDay, int m, int k) {
-        int n = bloomDay.length;
-        if ((long) m * k > n) return -1;
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        for (int day : bloomDay) {
-            min = Math.min(min, day);
-            max = Math.max(max, day);
+        if((long) m * k > bloomDay.length) return -1;
+        int ans = 0;
+        int min = bloomDay[0], max = bloomDay[0];
+        for(int i = 0; i < bloomDay.length; i++){
+            min = Math.min(min,bloomDay[i]);
+            max = Math.max(max, bloomDay[i]);
         }
-        while (min < max) {
-            int mid = min + (max - min) / 2;
-            if (canMakeBouquets(bloomDay, m, k, mid)) {
+        while(min < max){
+            int mid = (min + max)/2;
+            if(possibleBouqets(bloomDay, mid, k ,m)){
                 max = mid;
-            } else {
+                ans = mid;
+            }
+            else{
                 min = mid + 1;
             }
         }
         return min;
     }
-
-    private boolean canMakeBouquets(int[] bloomDay, int m, int k, int day) {
-        int bouquets = 0;
+    public boolean possibleBouqets(int[] arr, int days, int k, int m){
         int flowers = 0;
-        for (int bloom : bloomDay) {
-            if (bloom <= day) {
+        int bouqets = 0;
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] <= days){
                 flowers++;
-                if (flowers == k) {
-                    bouquets++;
+                if(flowers == k){
+                    bouqets++;
                     flowers = 0;
                 }
-            } else {
+            }
+            else{
                 flowers = 0;
             }
-            if (bouquets >= m) {
-                return true;
-            }
         }
-        return false;
+        return (bouqets >= m);
     }
 }
 
