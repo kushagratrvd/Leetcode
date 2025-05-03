@@ -1,21 +1,21 @@
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> list = new ArrayList<>();
+        List<List<Integer>> arr = new ArrayList<>();
         List<Integer> temp = new ArrayList<>();
-        int ind=0;
-        addSubsets(nums,ind,list,temp);
-        return list;
+        subsequences(arr, temp, 0, nums);
+        return arr;
     }
-    public void addSubsets(int[] nums,int ind, List<List<Integer>> list, List<Integer> temp) {
+
+    public void subsequences(List<List<Integer>> arr, List<Integer> temp, int ind, int[] nums){
         if(ind >= nums.length){
-            list.add(new ArrayList<>(temp));
+            arr.add(new ArrayList<>(temp));
             return;
         }
 
         temp.add(nums[ind]);
-        addSubsets(nums,ind+1,list,temp);
-        
+        subsequences(arr,temp,ind+1,nums);
+
         temp.remove(temp.size()-1);
-        addSubsets(nums,ind+1,list,temp);
+        subsequences(arr,temp,ind+1,nums);
     }
 }
