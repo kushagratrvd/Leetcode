@@ -1,23 +1,23 @@
 class Solution {
-    public List<List<Integer>> combinationSum(int[] nums, int target) {
-        List<List<Integer>> list = new ArrayList<>();
-        subsets(nums,target,0,new ArrayList<>(),list);
-        return list;
+    public List<List<Integer>> combinationSum(int[] nums, int k) {
+        List<List<Integer>> arr = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        Combi(nums, k, 0, arr, temp, 0);
+        return arr;
     }
-    public void subsets(int[] nums, int target, int i,List<Integer> temp ,List<List<Integer>> list) {
-        if(i == nums.length) {
-            if(target == 0){
-            list.add(new ArrayList<>(temp)); 
-            }
-        return;
-        }
- 
-        if(nums[i] <= target){
-            temp.add(nums[i]);
-            subsets(nums,target-nums[i],i,temp,list);
-            temp.remove(temp.size()-1);
-        }
-        
-        subsets(nums,target,i+1,temp,list);
+
+    public void Combi(int[] nums, int k, int ind, List<List<Integer>> arr, List<Integer> temp, int sum) {
+        if(sum == k){
+            arr.add(new ArrayList<>(temp));
+            return;
+        } 
+        if(ind >= nums.length || sum > k) return;
+        temp.add(nums[ind]);
+        sum += nums[ind];
+        Combi(nums, k, ind, arr, temp, sum);
+
+        temp.remove(temp.size()-1);
+        sum -= nums[ind];
+        Combi(nums, k, ind+1, arr, temp, sum);
     }
 }
