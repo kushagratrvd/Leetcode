@@ -1,24 +1,29 @@
 class Solution {
     public List<List<Integer>> combinationSum2(int[] nums, int target) {
-        List<List<Integer>> list = new ArrayList<>();
         Arrays.sort(nums);
-        recursion(list,nums,target, 0, new ArrayList<>());
-        return list;
+        List<List<Integer>> arr = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        Combi(nums, target, 0, arr, temp);
+        return arr;
     }
-    public void recursion(List<List<Integer>> list, int[] nums, int target, int ind, List<Integer> temp){
-        if(target == 0){
-            list.add(new ArrayList<>(temp));
+
+    public void Combi(int[] nums, int target, int ind, List<List<Integer>> arr, List<Integer> temp) {
+        if(target == 0){   
+            arr.add(new ArrayList<>(temp));
             return;
-        }
+        } 
         
         for(int i=ind; i<nums.length; i++){
-            if(i > ind && nums[i-1]==nums[i]) continue;
+            if(i>ind && nums[i] == nums[i-1]){
+                continue;
+            }
             if(nums[i] > target) break;
             temp.add(nums[i]);
-            recursion(list,nums,target-nums[i],i+1,temp);
+            Combi(nums, target-nums[i], i+1, arr, temp);
             temp.remove(temp.size()-1);
-            //recursion(list,nums,target,i+1,temp);
         }
-
+        
+        
+        //Combi(nums, target, ind+1, arr, temp, start);
     }
 }
