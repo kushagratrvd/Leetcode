@@ -1,23 +1,20 @@
 class Solution {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
-        List<List<Integer>> list = new ArrayList<>();
         Arrays.sort(nums);
-        Powerset(list,nums,new ArrayList<>(),0);
-        return list;
+        List<List<Integer>> arr = new ArrayList<>();
+        arr.add(new ArrayList<>());
+        List<Integer> temp = new ArrayList<>();
+        subsets(arr, temp, nums, 0);
+        return arr;
     }
-    public void Powerset(List<List<Integer>> list, int[] nums, List<Integer> temp, int i){
-        if(i==nums.length){
-            list.add(new ArrayList<>(temp));
-            return;
-        }
 
-        temp.add(nums[i]);
-        Powerset(list,nums,temp,i+1);
-        temp.remove(temp.size()-1);
-        int curr = nums[i];
-        for(int ind=i; ind<nums.length; ind++){
-            if(curr==nums[ind]) i++;
+    public void subsets(List<List<Integer>> arr, List<Integer> temp, int[] nums, int ind) {
+        for(int i=ind; i<nums.length; i++){
+            if(i>ind && nums[i] == nums[i-1]) continue;
+            temp.add(nums[i]);
+            arr.add(new ArrayList<>(temp));
+            subsets(arr,temp,nums,i+1);
+            temp.remove(temp.size()-1);
         }
-        Powerset(list,nums,temp,i);
     }
 }
