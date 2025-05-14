@@ -1,33 +1,60 @@
 class Solution {
     public List<List<String>> solveNQueens(int n) {
         List<List<String>> ans = new ArrayList<>();
-        List<String> temp = new ArrayList<>();
-        Queens(ans,temp, 0, n, new HashSet<>(), new HashSet<>(), new HashSet<>());
+        char[][] board = new char[n][n];
+        boolean flag = false;
+        for (char[] row : board)
+            Arrays.fill(row, '.');
+        Queens(ans, 0, n, board);
         return ans;
     }
 
-    public void Queens(List<List<String>> ans, List<String> temp, int row, int n, Set<Integer> diff1, Set<Integer> diff2, Set<Integer> lava){
-        if(row == n){
-            ans.add(new ArrayList<>(temp));
+    public void Queens(List<List<String>> ans, int col, int n, char[][] board){
+        if(col == n){
+            List<String> temp = new ArrayList<>();
+            for (char[] r : board)
+                temp.add(new String(r));
+            ans.add(temp);
             return;
         }
-        for(int col = 0; col<n; col++){
-            if(diff1.contains(col-row) || diff2.contains(col+row) || lava.contains(col)) continue;
+        for(int row = 0; row<n; row++){
+            boolean flag = false;
+            //upper diagonal
+            if(!flag) {
+                for(int i=row, j=col; i>=0 && j>=0; i--,j--){
+                    if(board[i][j] == 'Q'){
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            //lower diagonal
+            if(!flag) {
+                for(int i=row, j=col; i<n && j>=0; i++,j--){
+                    if(board[i][j] == 'Q'){
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if(!flag){
+                //horizontal
+                for(int j=col; j>=0; j--){
+                    if(board[row][j] == 'Q'){
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            
 
-            diff1.add(col-row);
-            diff2.add(col+row);
-            lava.add(col);
-            char[] chars = new char[n];
-            Arrays.fill(chars, '.');  // fill entire array with '.'
-            chars[col] = 'Q';      // set 'q' at desired colex
-            String str = new String(chars);
-            temp.add(str);
+            if(flag){
+                continue;
+            }
+            board[row][col] = 'Q';
 
-            Queens(ans, temp, row+1, n, diff1, diff2, lava);
-            temp.remove(temp.size()-1);
-            diff1.remove(col-row);
-            diff2.remove(col+row);
-            lava.remove(col);
+            Queens(ans, col+1, n, board);
+            board[row][col] = '.';
         }
     }
 }
