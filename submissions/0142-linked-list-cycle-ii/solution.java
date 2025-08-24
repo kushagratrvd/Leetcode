@@ -14,17 +14,16 @@ public class Solution {
         ListNode slow = head;
         ListNode fast = head;
         while(fast != null && fast.next != null){
-            
             slow = slow.next;
             fast = fast.next.next;
-            if(slow == fast){
+            if(fast == slow){
                 slow = head;
-                while(slow != fast){
-                    slow = slow.next;
+                while(fast != slow){
                     fast = fast.next;
+                    slow = slow.next;
                 }
                 return slow;
-            }
+            }    
         }
         return null;
     }
