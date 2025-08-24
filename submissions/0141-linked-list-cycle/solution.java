@@ -9,21 +9,16 @@
  *     }
  * }
  */
-import java.util.HashMap;
-import java.util.Map;
 public class Solution {
     public boolean hasCycle(ListNode head) {
-        Map<ListNode, Integer> node = new HashMap<>();
-        ListNode temp = head;
-
-        while(temp != null){
-            if(node.containsKey(temp)){
-                return true;
-            }
-            node.put(temp,1);
-            temp = temp.next;
-            
+        if (head == null) return false;
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while(slow != fast){
+            if(fast == null || fast.next == null) return false;
+            slow = slow.next;
+            fast = fast.next.next;
         }
-        return false;  
+        return true;
     }
 }
