@@ -9,58 +9,35 @@
  * }
  */
 class Solution {
-    public static ListNode reverseLinkedList(ListNode head) {
-        // Check if the list is empty or has only one node
-        if (head == null || head.next == null) {
-
-            return head;
+    public boolean isPalindrome(ListNode head) {
+        if(head == null || head.next == null) return true;
+        if(head.next.next == null){
+            if(head.val == head.next.val) return true;
+            return false;
         }
-
-        ListNode newHead = reverseLinkedList(head.next);
-
-        ListNode front = head.next;
-
-        front.next = head;
-
-        head.next = null;
-
-        return newHead;
-    }
-    
-    public static boolean isPalindrome(ListNode head) {
-
-        if (head == null || head.next == null) {
-
-            return true;
-        }
-    
         ListNode slow = head;
         ListNode fast = head;
-    
-        while (fast.next != null && fast.next.next != null) {
-
+        while(fast != null && fast.next != null){
             slow = slow.next;
-    
             fast = fast.next.next;
         }
-    
-        ListNode newHead = reverseLinkedList(slow.next);
-    
-        ListNode first = head;
-    
-        ListNode second = newHead;
-        while (second != null) {
-
-            if (first.val != second.val) {
-                
-                return false;
-            }
-
-            first = first.next;
-    
-            second = second.next;
+        if (fast != null) slow = slow.next;
+        //ListNode temp = slow;
+        ListNode prev = null;
+        ListNode curr = slow;
+        while(curr != null){
+            ListNode front = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = front;
         }
-
+        ListNode first = head;
+        ListNode last = prev;
+        while(first != null && last != null){
+            if(first.val != last.val) return false;
+            first = first.next;
+            last = last.next;
+        }
         return true;
-    }   
+    }
 }
