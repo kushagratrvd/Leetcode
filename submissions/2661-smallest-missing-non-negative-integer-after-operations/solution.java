@@ -1,19 +1,17 @@
 class Solution {
-    public int findSmallestInteger(int[] nums, int value) {
-        int n = nums.length;
-        int[] freq = new int[value];
-        
-        for (int num : nums) {
-            int mod = ((num % value) + value) % value; // handle negatives properly
-            freq[mod]++;
+    public int findSmallestInteger(int[] nums, int val) {
+        int[] map = new int[val];
+        for(int i=0; i<nums.length; i++){
+            int a = ((nums[i] % val) + val) % val;
+            map[a]++;
         }
-
-        int k = 0;
-        while (true) {
-            int mod = k % value;
-            if (freq[mod] == 0) return k;
-            freq[mod]--;
-            k++;
+        int mex = 0;
+        while(true){
+            if(map[mex%val] > 0){
+                map[mex%val]--;
+                mex++;
+            } 
+            else return mex;
         }
     }
 }
