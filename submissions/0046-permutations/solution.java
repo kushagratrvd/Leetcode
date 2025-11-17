@@ -1,28 +1,29 @@
 class Solution {
+    public void recursion(int start,List<Integer> temp,int n,List<List<Integer>> ans,int[] visited, int[] nums){
+        if(temp.size()==n){
+            ans.add(new ArrayList<Integer>(temp));
+            return;
+        }
+        for(int i=(start+1)%n; i!=start; i=(i+1)%n){
+            if(visited[i]==1) continue;
+            visited[i]=1;
+            temp.add(nums[i]);
+            recursion(i,temp,n,ans,visited,nums);
+            temp.remove(temp.size()-1);
+            visited[i] = 0;
+        }
+    }
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> arr = new ArrayList<>();
-        permutations(arr, 0, nums);
-        return arr;
-    }
-
-    public void permutations(List<List<Integer>> arr, int ind, int[] nums) {
-        if(ind == nums.length){
-            List<Integer> ds = new ArrayList<>();
-            for(int i=0; i<nums.length; i++){
-                ds.add(nums[i]);
-            }
-            arr.add(new ArrayList<>(ds));
+        int n = nums.length;
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            int[] visited = new int[n];
+            visited[i] = 1;
+            temp.add(nums[i]);
+            recursion(i,temp,n,ans,visited,nums);
+            temp.remove(temp.size()-1);
         }
-        for(int start = ind; start < nums.length; start++){
-            swap(ind, nums, start);
-            permutations(arr, ind+1, nums);
-            swap(ind, nums, start);           
-        }
-    }
-
-    public void swap(int ind, int[] nums, int start) {
-        int temp = nums[start];
-        nums[start] = nums[ind];
-        nums[ind] = temp;
+        return ans;
     }
 }
