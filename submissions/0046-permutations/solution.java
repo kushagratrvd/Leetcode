@@ -1,29 +1,21 @@
 class Solution {
-    public void recursion(int start,List<Integer> temp,int n,List<List<Integer>> ans,int[] visited, int[] nums){
-        if(temp.size()==n){
-            ans.add(new ArrayList<Integer>(temp));
-            return;
-        }
-        for(int i=(start+1)%n; i!=start; i=(i+1)%n){
-            if(visited[i]==1) continue;
-            visited[i]=1;
-            temp.add(nums[i]);
-            recursion(i,temp,n,ans,visited,nums);
-            temp.remove(temp.size()-1);
-            visited[i] = 0;
-        }
-    }
     public List<List<Integer>> permute(int[] nums) {
-        int n = nums.length;
-        List<List<Integer>> ans = new ArrayList<>();
-        List<Integer> temp = new ArrayList<>();
-        for(int i=0; i<n; i++){
-            int[] visited = new int[n];
-            visited[i] = 1;
-            temp.add(nums[i]);
-            recursion(i,temp,n,ans,visited,nums);
-            temp.remove(temp.size()-1);
-        }
-        return ans;
-    }
+   List<List<Integer>> list = new ArrayList<>();
+   // Arrays.sort(nums); // not necessary
+   backtrack(list, new ArrayList<>(), nums);
+   return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums){
+   if(tempList.size() == nums.length){
+      list.add(new ArrayList<>(tempList));
+   } else{
+      for(int i = 0; i < nums.length; i++){ 
+         if(tempList.contains(nums[i])) continue; // element already exists, skip
+         tempList.add(nums[i]);
+         backtrack(list, tempList, nums);
+         tempList.remove(tempList.size() - 1);
+      }
+   }
+} 
 }
