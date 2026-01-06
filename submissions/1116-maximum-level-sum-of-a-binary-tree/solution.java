@@ -14,36 +14,34 @@
  * }
  */
 class Solution {
-    public class Pair {
-        TreeNode node;
-        int index;
-        Pair(TreeNode node, int index){
-            this.node = node;
-            this.index = index;
-        }
-    }
     public int maxLevelSum(TreeNode root) {
-        Queue<Pair> q = new ArrayDeque<>();
-        q.offer(new Pair(root,1));
-        ArrayList<Integer> sums = new ArrayList<>();
+        Queue<TreeNode> q = new ArrayDeque<>();
+        q.offer(root);
+        int[] maxSum = new int[]{root.val,1};
+        int index = 1;
         while(!q.isEmpty()){
-            Pair curr = q.poll();
-            if(curr.index > sums.size()){
-                sums.add(curr.node.val);
+            int size = q.size();
+            int sum = 0;
+            boolean flag = false;
+            for(int i = 0; i < size; i++){
+                TreeNode node = q.poll();
+                if(node.left != null){
+                    q.offer(node.left);
+                    sum += node.left.val;
+                    flag = true;
+                } 
+                if(node.right != null){
+                    sum += node.right.val;
+                    q.offer(node.right);
+                    flag = true;
+                } 
             }
-            else sums.set(curr.index-1, curr.node.val + sums.get(curr.index-1));
-            TreeNode node = curr.node;
-            if(node.left != null) q.offer(new Pair(node.left,curr.index+1));
-            if(node.right != null) q.offer(new Pair(node.right,curr.index+1));
+            index++;
+            if(flag && sum > maxSum[0]){
+                maxSum[0] = sum;
+                maxSum[1] = index;
+            }
         }
-        int[] maxIndex = new int[]{Integer.MIN_VALUE,0};
-        for(int i = 0; i < sums.size(); i++){
-            int curr = sums.get(i);
-            if(curr > maxIndex[0]){
-                maxIndex[0] = curr;
-                maxIndex[1] = i;
-            } 
-        }
-        return maxIndex[1]+1;
+        return maxSum[1];
     }
 }
