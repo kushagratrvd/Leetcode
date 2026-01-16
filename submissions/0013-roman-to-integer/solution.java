@@ -1,23 +1,53 @@
 class Solution {
     public int romanToInt(String s) {
-        int res = 0;
-        Map<Character, Integer> roman = new HashMap<>();
-        roman.put('I', 1);
-        roman.put('V', 5);
-        roman.put('X', 10);
-        roman.put('L', 50);
-        roman.put('C', 100);
-        roman.put('D', 500);
-        roman.put('M', 1000);
-
-        for (int i = 0; i < s.length() - 1; i++) {
-            if (roman.get(s.charAt(i)) < roman.get(s.charAt(i + 1))) {
-                res -= roman.get(s.charAt(i));
-            } else {
-                res += roman.get(s.charAt(i));
+        int ans = 0;
+        int n = s.length();
+        for(int i=0; i<n; i++){
+            char curr = s.charAt(i);
+            if(curr == 'I'){
+                if(i+1 < n && s.charAt(i+1) == 'V'){
+                    ans += 4;
+                    i++;
+                } 
+                else if(i+1 < n && s.charAt(i+1) == 'X'){
+                    ans += 9;
+                    i++;
+                }
+                else ans++;
             }
+            else if(curr == 'X'){
+                if(i+1 < n && s.charAt(i+1) == 'L'){
+                    ans += 40;
+                    i++;
+                } 
+                else if(i+1 < n && s.charAt(i+1) == 'C'){
+                    ans += 90;
+                    i++;
+                }
+                else ans += 10;
+            }
+            else if(curr == 'C'){
+                if(i+1 < n && s.charAt(i+1) == 'D'){
+                    ans += 400;
+                    i++;
+                } 
+                else if(i+1 < n && s.charAt(i+1) == 'M'){
+                    ans += 900;
+                    i++;
+                }
+                else ans += 100;
+            }
+            else if(curr == 'V'){
+                ans += 5;
+            }
+            else if(curr == 'L'){
+                ans += 50;
+            }
+            else if(curr == 'D'){
+                ans += 500;
+            }
+            else ans += 1000;
         }
-
-        return res + roman.get(s.charAt(s.length() - 1));        
+        return ans;
     }
 }
