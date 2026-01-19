@@ -4,7 +4,7 @@ class Solution {
         if(dp[i][j] != Integer.MIN_VALUE) return dp[i][j];
 
         long first = nums1[i] * nums2[j];
-        long second = nums1[i] * nums2[j] + solve(nums1, nums2, i+1, j+1, dp);
+        long second = first + solve(nums1, nums2, i+1, j+1, dp);
         long third = solve(nums1, nums2, i, j+1, dp);
         long fourth = solve(nums1, nums2, i+1, j, dp);
         long max1 = Math.max(first, second);
