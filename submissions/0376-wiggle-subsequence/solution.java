@@ -1,35 +1,18 @@
 class Solution {
-    int[][][] dp;
+    public int wiggleMaxLength(int[] nums) {
+        if (nums.length < 2) return nums.length;
+        if(nums.length == 2 && nums[1] - nums[0] == 0) return 1;
 
-    int solve(int idx, int prev, int up, int[] nums) {
-        if (idx == nums.length) return 0;
-
-        if (dp[idx][prev + 1][up] != -1)
-            return dp[idx][prev + 1][up];
-
-        int notTake = solve(idx + 1, prev, up, nums);
-        int take = 0;
-
-        if (prev == -1 ||
-           (up == 1 && nums[idx] > nums[prev]) ||
-           (up == 0 && nums[idx] < nums[prev])) {
-            take = 1 + solve(idx + 1, idx, 1 - up, nums);
+        int prev = nums[1] - nums[0];
+        int count = (prev != 0) ? 2 : 1;
+        for (int i = 2; i < nums.length; i++) {
+            int curr = nums[i] - nums[i-1];
+            if(curr > 0 && prev <= 0 || curr < 0 && prev >= 0){
+                count++;
+                prev = curr;
+            }             
         }
 
-        return dp[idx][prev + 1][up] = Math.max(take, notTake);
-    }
-
-    public int wiggleMaxLength(int[] nums) {
-        int n = nums.length;
-        dp = new int[n][n + 1][2];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j <= n; j++)
-                Arrays.fill(dp[i][j], -1);
-
-        return Math.max(
-            solve(0, -1, 1, nums),
-            solve(0, -1, 0, nums)
-        );
+        return count;
     }
 }
-
