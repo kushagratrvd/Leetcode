@@ -1,32 +1,37 @@
 class Solution {
     public int orangesRotting(int[][] grid) {
-        int fresh = 0;
-        Queue<int[]> q = new ArrayDeque<>();
-        for(int i=0; i<grid.length; i++){
-            for(int j=0; j<grid[0].length; j++){
+        int m = grid.length;
+        int n = grid[0].length;
+        Queue<int[]> q = new LinkedList<>();
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
                 if(grid[i][j] == 2) q.offer(new int[]{i,j});
-                else if(grid[i][j] == 1) fresh++;
             }
         }
-        if(fresh == 0) return 0;
-        int minutes = -1;
-        int[][] dir = {{0,1},{-1,0},{1,0},{0,-1}};
+        int[][] dir = new int[][]{{-1,0},{1,0},{0,1},{0,-1}};
+        int count = 0;
+        int o = q.size();
         while(!q.isEmpty()){
-            minutes++;
-            int k = q.size();
-            for(int i=0; i<k; i++){
-                int[] arr = q.poll();
-                for(int j=0; j<dir.length; j++){
-                    int x = arr[0] + dir[j][0];
-                    int y = arr[1] + dir[j][1];
-                    if(x<0 || y<0 || x>=grid.length || y >=grid[0].length || grid[x][y] != 1) continue;
-                    grid[x][y] = 2;
-                    fresh--;
-                    q.offer(new int[]{x,y});
+            for(int i=0; i<o; i++){
+                int[] polled = q.poll();
+                
+                for(int[] d:dir){
+                    int row = polled[0]+d[0];
+                    int col = polled[1]+d[1];
+                    if(row < 0 || col < 0 || row >= m || col >= n || grid[row][col] != 1) continue;
+                    q.offer(new int[]{row,col});
+                    grid[row][col] = 2;
                 }
             }
+            o = q.size();
+            count++;
         }
-        if(fresh > 0) return -1;
-        return minutes;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == 1) return -1;
+            }
+        }
+        if(count == 0) return 0;
+        return count-1;
     }
 }
