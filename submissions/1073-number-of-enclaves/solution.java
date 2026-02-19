@@ -1,46 +1,42 @@
 class Solution {
-    
-    public void dfs(int[][] grid, boolean[][] visited, int i, int j) {
-        visited[i][j] = true;
-        int[][] dir = {{0,1},{1,0},{-1,0},{0,-1}};
-        for(int[] d : dir){
-            int x = d[0] + i;
-            int y = d[1] + j;
-            if(x >= 0 && y >= 0 && x < grid.length && y < grid[0].length && grid[x][y] == 1 && !visited[x][y]){
-                dfs(grid, visited, x, y);
-            }
-        }
+    public void bfs(int[][] grid, int row, int col, int[][] visited){
+        if(row < 0 || col < 0 || row >= grid.length || col >= grid[0].length || visited[row][col] == 1 || grid[row][col] == 0) return;
+        visited[row][col] = 1;
+        bfs(grid,row+1,col,visited);
+        bfs(grid,row,col+1,visited);
+        bfs(grid,row-1,col,visited);
+        bfs(grid,row,col-1,visited);
     }
     public int numEnclaves(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        boolean[][] visited = new boolean[m][n]; 
-        for(int i=0; i<m; i++){
-            if(grid[i][0] == 1 && !visited[i][0]){
-                dfs(grid, visited, i, 0);
-            }
+        int[][] visited = new int[m][n];
+        for(int i=0; i<n; i++){
+            if(visited[0][i] == 1 || grid[0][i] == 0) continue;
+            //visited[0][i] = 1;
+            bfs(grid,0,i,visited);
         }
-        for(int j=0; j<n; j++){
-            if(grid[0][j] == 1 && !visited[0][j]){
-                dfs(grid, visited, 0, j);
-            }
+        for(int i=0; i<n; i++){
+            if(visited[m-1][i] == 1 || grid[m-1][i] == 0) continue;
+            //visited[m-1][i] = 1;
+            bfs(grid,m-1,i,visited);
         }
-        for(int j=0; j<n; j++){
-            if(grid[m-1][j] == 1 && !visited[m-1][j]){
-                dfs(grid, visited, m-1, j);
-            }
+        for(int j=0; j<m; j++){
+            if(visited[j][0] == 1 || grid[j][0] == 0) continue;
+            //visited[j][0] = 1;
+            bfs(grid,j,0,visited);
         }
-        for(int i=0; i<m; i++){
-            if(grid[i][n-1] == 1 && !visited[i][n-1]){
-                dfs(grid, visited, i, n-1);
-            }
+        for(int j=0; j<m; j++){
+            if(visited[j][n-1] == 1 || grid[j][n-1] == 0) continue;
+            //visited[j][n-1] = 1;
+            bfs(grid,j,n-1,visited);
         }
         int count = 0;
-        for(int i=1; i<m-1; i++){
-            for(int j=1; j<n-1; j++){
-                if(grid[i][j] == 1){
-                    if(!visited[i][j]) count++; 
-                } 
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(visited[i][j] == 0 && grid[i][j] == 1){
+                    count++;
+                }
             }
         }
         return count;
