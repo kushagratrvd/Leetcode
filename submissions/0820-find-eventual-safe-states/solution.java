@@ -1,37 +1,28 @@
 class Solution {
-    public boolean dfs(int curr, int[][] graph, boolean[] visited, boolean[] pathVisited,
-    int[] flag){
-        visited[curr] = true;
-        pathVisited[curr] = true;
-        int[] list = graph[curr];
-
-        for(int i=0; i<list.length; i++){
-            int a = list[i];
-            if(!visited[a]){
-                if(dfs(a, graph, visited, pathVisited, flag)) return true;
-            }
-            else if(pathVisited[a]){
-                //pathVisited[a] = false;
-                //flag[a] = 1;
-                return true;
-            }
+    public int dfs(int val,int[][] graph,int[] visited,int[] safe){
+        visited[val] = 1;
+        safe[val] = 1;
+        int[] curr = graph[val];
+        for(int j : curr){
+            if(safe[j] == 1) return -1;
+            else if(visited[j] == 1) continue;
+            int value = dfs(j, graph,visited,safe);
+            if(value == -1) return -1;
         }
-        pathVisited[curr] = false;
-        flag[curr] = 2;
-        return false;
+        safe[val] = 0;
+        return 0;
     }
     public List<Integer> eventualSafeNodes(int[][] graph) {
-        boolean[] visited = new boolean[graph.length];
-        boolean[] pathVisited = new boolean[graph.length];
-        int[] flag = new int[graph.length];
-        List<Integer> ans = new ArrayList<>();
+        int[] visited = new int[graph.length];
+        //int[] pathVisited = new int[graph.length];
+        int[] safe = new int[graph.length];
         for(int i=0; i<graph.length; i++){
-            if(!visited[i]){
-                dfs(i, graph, visited, pathVisited, flag);
-            }
+            if(visited[i] == 1) continue;
+            dfs(i, graph,visited,safe);
         }
-        for(int i=0; i<flag.length; i++){
-            if(flag[i] == 2) ans.add(i);
+        List<Integer> ans = new ArrayList<>();
+        for(int i=0; i<safe.length; i++){
+            if(safe[i] == 0) ans.add(i);
         }
         return ans;
     }
