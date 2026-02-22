@@ -1,41 +1,31 @@
 class Solution {
-    public boolean dfs(int[] pathVisited, int[] visited, List<List<Integer>> graph, int node, Deque<Integer> st){
-        visited[node] = 1;
-        pathVisited[node] = 1;
-        List<Integer> relatives = graph.get(node);
-        for(int curr : relatives){
-            if(pathVisited[curr] == 1){
-                return true;
-            }
-            if(visited[curr] != 1){
-                if(dfs(pathVisited,visited,graph,curr,st)) return true;
-            }
-        }
-        pathVisited[node] = 0;
-        st.push(node);
-        return false;
-    }
-    public int[] findOrder(int num, int[][] pre) {
-        int[] ans = new int[num];
+    public int[] findOrder(int nums, int[][] pre) {
         List<List<Integer>> graph = new ArrayList<>();
-        for(int i=0; i<num; i++){
-            graph.add(new ArrayList<>());
-        }
+        for(int i=0; i<nums; i++) graph.add(new ArrayList<>());
+        int[] indegree = new int[nums];
         for(int i=0; i<pre.length; i++){
             graph.get(pre[i][1]).add(pre[i][0]);
+            indegree[pre[i][0]]++;
         }
-        Deque<Integer> st = new ArrayDeque<>();
-        int[] visited = new int[num];
-        int[] pathVisited = new int[num];
-        for(int i=0; i<num; i++){
-            if(visited[i] == 1) continue;
-            if(dfs(pathVisited, visited, graph, i, st)) return new int[0];
+        Queue<Integer> q = new ArrayDeque<>();
+        int[] ans = new int[nums];
+        int track = 0;
+        for(int i=0; i<nums; i++){
+            if(indegree[i] == 0) q.offer(i);
         }
-        int[] res = new int[num];
-        int n = st.size();
-        for(int i=0; i<n; i++){
-            res[i] = st.pop();
+        while(!q.isEmpty()){
+            int curr = q.poll();
+            ans[track] = curr;
+            track++;
+            List<Integer> array = graph.get(curr);
+            for(int i : array){
+                indegree[i]--;
+                if(indegree[i] == 0) q.offer(i);
+            }
         }
-        return res;
+        for(int i=0; i<nums; i++){
+            if(indegree[i] == 1) return new int[0];
+        }
+        return ans;
     }
 }
