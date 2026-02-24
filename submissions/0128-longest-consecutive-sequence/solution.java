@@ -1,24 +1,26 @@
 class Solution {
-    public int longestConsecutive(int[] a) {
-        int n = a.length;
-        if (n == 0) return 0;
-        int longest = 1;
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            map.put(a[i],i);
+    public int longestConsecutive(int[] nums) {
+        //392
+        if(nums.length == 0) return 0;
+        HashSet<Integer> set = new HashSet<>();
+        int max = 1;
+        int count = 1;
+        for(int i=0; i<nums.length; i++){
+            set.add(nums[i]);
         }
-        for (int i=0; i < a.length; i++) {
-            int it = a[i];
-            if (!map.containsKey(it - 1)) {
-                int cnt = 1;
-                int x = it;
-                while (map.containsKey(++x)) {
-                    //x = x + 1;
-                    cnt++;
+        for(int num : set){
+            if(!set.contains(num-1)){
+                int curr = num;
+                count = 1;
+                while(set.contains(curr + 1)){
+                    //set.remove(curr);   i cannot remove and traverse elements from set at same time
+                    count++;
+                    curr++;
                 }
-                longest = Math.max(longest, cnt);
+                max = Math.max(max,count);
             }
         }
-        return longest;
+        //max = Math.max(max,count);
+        return max;
     }
 }
