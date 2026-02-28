@@ -3,13 +3,16 @@ class Solution {
         int n = nums.length;
         if(n == 1) return nums[0];
         if(n == 2) return Math.max(nums[1],nums[0]); 
+        int[] dp = new int[n];
+        dp[0] = nums[0];
+        dp[1] = nums[1];
+        int jump1 = 0;
+        int jump2 = 0;
         for(int i=2; i<n; i++){
-            int first = 0;
-            int second = 0;
-            first = nums[i] + nums[i-2];
-            if(i-3 >= 0) second = nums[i] + nums[i-3];
-            nums[i] = (int)Math.max(first,second);
+            if(i-3 >= 0) jump1 = nums[i] + dp[i-3];
+            jump2 = nums[i] + dp[i-2];
+            dp[i] = (int)Math.max(jump1,jump2);
         }
-        return Math.max(nums[n-1],nums[n-2]);
+        return Math.max(dp[n-1], dp[n-2]);
     }
 }
