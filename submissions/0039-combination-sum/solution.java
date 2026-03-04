@@ -1,23 +1,32 @@
 class Solution {
-    public List<List<Integer>> combinationSum(int[] nums, int k) {
-        List<List<Integer>> arr = new ArrayList<>();
-        List<Integer> temp = new ArrayList<>();
-        Combi(nums, k, 0, arr, temp, 0);
-        return arr;
-    }
-
-    public void Combi(int[] nums, int k, int ind, List<List<Integer>> arr, List<Integer> temp, int sum) {
-        if(sum == k){
-            arr.add(new ArrayList<>(temp));
+    public void dfs(int index, int sum, int[] arr, int target, List<Integer> temp, List<List<Integer>> ans){
+        if(sum == target){
+            List<Integer> temp2 = new ArrayList<>(temp);
+            //Collections.sort(temp2);
+            
+            ans.add(temp2);
+            
             return;
-        } 
-        if(ind >= nums.length || sum > k) return;
-        temp.add(nums[ind]);
-        sum += nums[ind];
-        Combi(nums, k, ind, arr, temp, sum);
-
-        temp.remove(temp.size()-1);
-        sum -= nums[ind];
-        Combi(nums, k, ind+1, arr, temp, sum);
+        }
+        if(index >= arr.length || sum + arr[index] > target) return;
+        
+        for(int i = index; i<arr.length; i++){
+            if(sum + arr[i] <= target){
+                temp.add(arr[i]);
+                dfs(i, sum + arr[i], arr, target, temp, ans);
+                temp.remove(temp.size()-1);
+                //dfs(i+1, sum, arr, target, temp, ans);
+            }
+        }
+            
+    }
+    public List<List<Integer>> combinationSum(int[] arr, int target) {
+        int sum = 0;
+        for(int num:arr) sum += num;
+        Arrays.sort(arr);
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        dfs(0, 0, arr, target, temp, ans);
+        return ans;
     }
 }
