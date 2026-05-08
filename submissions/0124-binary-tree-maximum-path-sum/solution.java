@@ -14,21 +14,31 @@
  * }
  */
 class Solution {
-    public int dfs(TreeNode root, int[] height) {
-        if(root.left == null && root.right == null){
-            height[0] = Math.max(height[0], root.val);
+    public int sum(TreeNode root, int[] max){
+        if(root == null) return 0;
+        int left = sum(root.left, max);
+        int right = sum(root.right, max);
+        if(root.left != null) max[0] = Math.max(max[0], left);
+        if(root.right != null) max[0] = Math.max(max[0], right);
+        max[0] = Math.max(max[0], root.val);
+        max[0] = Math.max(max[0], left + right + root.val);
+        if(left < 0 && right < 0){
+            max[0] = Math.max(max[0], root.val);
             return root.val;
         }
-        int lh = 0, rh = 0;
-        if(root.left != null) {lh = Math.max(0,dfs(root.left, height));};
-        if(root.right != null) {rh = Math.max(0,dfs(root.right, height));};
-
-        height[0] = Math.max(height[0], lh + rh + root.val);
-        return Math.max(lh,rh) + root.val;
+        if(left > right){
+            max[0] = Math.max(max[0], left + root.val);
+            return left + root.val;
+        }
+        else{
+            max[0] = Math.max(max[0], right + root.val);
+            return right + root.val;
+        }
     }
     public int maxPathSum(TreeNode root) {
-        int[] height = {Integer.MIN_VALUE};
-        height[0] = Math.max(dfs(root, height),height[0]);
-        return height[0];
+        int[] max = new int[1];
+        max[0] = Integer.MIN_VALUE;
+        sum(root, max);
+        return max[0];
     }
 }
