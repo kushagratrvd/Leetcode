@@ -15,20 +15,20 @@
  */
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-        if (root == null) return new ArrayList<>();
         Queue<TreeNode> q = new ArrayDeque<>();
-        q.add(root);
         List<List<Integer>> ans = new ArrayList<>();
+        if(root == null) return ans;
+        q.offer(root);
         while(!q.isEmpty()){
-            int size = q.size();
-            List<Integer> children = new ArrayList<>();
-            for(int i=0; i<size; i++){
-                TreeNode curr = q.poll();
-                children.add(curr.val);
-                if(curr.left != null) q.add(curr.left);
-                if(curr.right != null) q.add(curr.right);
-            } 
-            if(!children.isEmpty()) ans.add(children);
+            int n = q.size();
+            List<Integer> temp = new ArrayList<>();
+            for(int i=0; i<n; i++){
+                TreeNode node = q.poll();
+                temp.add(node.val);
+                if(node.left != null) q.offer(node.left);
+                if(node.right != null) q.offer(node.right);
+            }
+            ans.add(temp);
         }
         return ans;
     }
