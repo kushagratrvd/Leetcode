@@ -1,24 +1,28 @@
 class Solution {
-    public int largestRectangleArea(int[] nums) {
+    public int largestRectangleArea(int[] h) {
         Stack<Integer> st = new Stack<>();
-        st.push(0);
-        int max = -1;
-        for(int i=1; i<nums.length; i++){
-            while(!st.isEmpty() && nums[i] < nums[st.peek()]){
-                int top = st.pop();
-                int product = i - top - 1;
-                if(!st.isEmpty()) product = product + top - st.peek();
-                else product = product + top + 1;
-                max = Math.max(max, nums[top] * product);
-            }
+        int n = h.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+
+        for(int i=0; i<n; i++){
+            while(!st.isEmpty() && h[st.peek()] >= h[i]) st.pop();
+            if(st.isEmpty()) left[i] = -1;
+            else left[i] = st.peek();
             st.push(i);
         }
-        while(!st.isEmpty()){
-            int top = st.pop();
-            int product = nums.length - top - 1;
-            if(!st.isEmpty()) product = product + top - st.peek();
-            else product = product + top + 1;
-            max = Math.max(max, nums[top] * product);
+        st.clear();
+        for(int i=n-1; i>=0; i--){
+            while(!st.isEmpty() && h[st.peek()] >= h[i]) st.pop();
+            if(st.isEmpty()) right[i] = n;
+            else right[i] = st.peek();
+            st.push(i);
+        }
+        int max = -1;
+        for(int i=0; i<n; i++){
+            int width = right[i] - left[i] - 1;
+            System.out.println(i + ": " + right[i] + " " + left[i] + " " + width);
+            max = Math.max(max, h[i]*width);
         }
         return max;
     }
