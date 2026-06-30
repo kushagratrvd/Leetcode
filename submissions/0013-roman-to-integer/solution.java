@@ -1,53 +1,55 @@
 class Solution {
     public int romanToInt(String s) {
-        int ans = 0;
-        int n = s.length();
-        for(int i=0; i<n; i++){
+        int sum = 0;
+        for(int i=0; i<s.length(); i++){
             char curr = s.charAt(i);
             if(curr == 'I'){
-                if(i+1 < n && s.charAt(i+1) == 'V'){
-                    ans += 4;
-                    i++;
-                } 
-                else if(i+1 < n && s.charAt(i+1) == 'X'){
-                    ans += 9;
-                    i++;
+                if(i+1 < s.length()){
+                    if(s.charAt(i+1) == 'V'){
+                        sum += 4;
+                        i++;
+                    }
+                    else if(s.charAt(i+1) == 'X'){
+                        sum+= 9;
+                        i++;
+                    }
+                    else sum+= 1;
                 }
-                else ans++;
+                else sum += 1;
             }
             else if(curr == 'X'){
-                if(i+1 < n && s.charAt(i+1) == 'L'){
-                    ans += 40;
-                    i++;
-                } 
-                else if(i+1 < n && s.charAt(i+1) == 'C'){
-                    ans += 90;
-                    i++;
+                if(i+1 < s.length()){
+                    if(s.charAt(i+1) == 'L'){
+                        sum += 40;
+                        i++;
+                    }
+                    else if(s.charAt(i+1) == 'C'){
+                        sum+= 90;
+                        i++;
+                    }
+                    else sum+= 10;
                 }
-                else ans += 10;
+                else sum += 10;
             }
-            else if(curr == 'C'){
-                if(i+1 < n && s.charAt(i+1) == 'D'){
-                    ans += 400;
-                    i++;
-                } 
-                else if(i+1 < n && s.charAt(i+1) == 'M'){
-                    ans += 900;
-                    i++;
+            else if(curr =='C'){
+                if(i+1 < s.length()){
+                    if(s.charAt(i+1) == 'D' ){
+                        sum += 400;
+                        i++;
+                    }
+                    else if(s.charAt(i+1) == 'M' ){
+                        sum+= 900;
+                        i++;
+                    }
+                    else sum+= 100;
                 }
-                else ans += 100;
+                else sum += 100;
             }
-            else if(curr == 'V'){
-                ans += 5;
-            }
-            else if(curr == 'L'){
-                ans += 50;
-            }
-            else if(curr == 'D'){
-                ans += 500;
-            }
-            else ans += 1000;
+            else if(curr == 'V') sum += 5;
+            else if(curr == 'L') sum += 50;
+            else if(curr == 'D') sum += 500;
+            else sum += 1000;
         }
-        return ans;
+        return sum;
     }
 }
