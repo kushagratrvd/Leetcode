@@ -1,28 +1,37 @@
 class Solution {
     public int myAtoi(String s) {
-        int INT_MAX = 2147483647, INT_MIN = -2147483648;
-        int i = 0, n = s.length(), sign = 1, result = 0;
-        
-        // Step 1: Skip leading whitespace
-        while (i < n && s.charAt(i) == ' ') i++;
-        
-        // Step 2: Check for optional sign
-        if (i < n && (s.charAt(i) == '-' || s.charAt(i) == '+')) {
-            sign = s.charAt(i) == '-' ? -1 : 1;
+        s=s.trim();
+        if(s.length() == 0) return 0;
+        //System.out.println(s);
+        char c = s.charAt(0);
+        boolean flag = false;
+        long sum = 0;
+        int i=0;
+        if(c == '-'){
+            flag = true;
             i++;
         }
-        
-        // Step 3: Convert digits to integer
-        while (i < n && Character.isDigit(s.charAt(i))) {
-            int digit = s.charAt(i) - '0';
-            // Check for overflow
-            if (result > (INT_MAX - digit) / 10) {
-                return sign == 1 ? INT_MAX : INT_MIN;
+        else if(c == '+'){
+            i++;
+        }
+        for(int j=i; j<s.length(); j++){
+            c = s.charAt(j);
+            //System.out.println(c);
+            if(c >= 48 && c < 58){
+                //System.out.println(Long.valueOf(c));
+
+                sum = (long)(sum * 10 + c - '0');
+                if(sum > Integer.MAX_VALUE){
+                    if(flag) sum = Integer.MIN_VALUE;
+                    else sum = Integer.MAX_VALUE;
+                    break;
+                }
             }
-            result = result * 10 + digit;
-            i++;
+            else break;
         }
+        if(flag) sum *= -1;
         
-        return sign * result;
+        return (int)sum;
+
     }
 }
