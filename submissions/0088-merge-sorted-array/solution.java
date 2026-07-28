@@ -1,35 +1,19 @@
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        Queue<Integer> q = new LinkedList<>();
-        int i=0, j=0;
-        while(i<m+n && j<n){
-            if(q.isEmpty()){
-                if(nums2[j] < nums1[i] || (i>=m && nums1[i] == 0)){
-                    if(i < m) q.offer(nums1[i]);
-                    nums1[i] = nums2[j];
-                    i++;
-                    j++;
-                }
-                else i++;
+        int i=m-1;
+        int j=n-1;
+        int back = m+n-1;
+        while(i >=0 && j >=0){
+            if(nums1[i] >= nums2[j]){
+                nums1[back--] = nums1[i];
+                i--;
             }
-            else{
-                if(nums2[j] < q.peek()){
-                    if(i < m) q.offer(nums1[i]);
-                    nums1[i] = nums2[j];
-                    i++;
-                    j++;
-                }
-                else if(nums2[j] >= q.peek()){
-                    if(i < m) q.offer(nums1[i]);
-                    nums1[i] = q.poll();
-                    i++;
-                }
+            else if(nums1[i] < nums2[j]){
+                nums1[back--] = nums2[j];
+                j--;
             }
         }
-        while(!q.isEmpty()){
-            if(i < m) q.offer(nums1[i]);
-            nums1[i] = q.poll();
-            i++;
-        }
+        while(i >= 0) nums1[back--] = nums1[i--];
+        while(j >= 0) nums1[back--] = nums2[j--];
     }
 }
