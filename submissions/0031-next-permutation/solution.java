@@ -1,32 +1,30 @@
-import java.util.Arrays;
 class Solution {
     public void nextPermutation(int[] nums) {
-        int n = nums.length;
-        int i = n - 2;
-        while (i >= 0 && nums[i] >= nums[i + 1]) {
-            i--;
+        if(nums.length == 1) return;
+        int i = nums.length-1;
+        int prev = nums[i--];
+        while(i >= 0){
+            if(nums[i] < prev) break;
+            prev = nums[i--];
         }
-
-        if (i >= 0) {
-            int j = n - 1;
-            while (nums[j] <= nums[i]) {
-                j--;
-            }
-            swap(nums, i, j);
+        int j=nums.length-1;
+        int temp = 0;
+        if(i < 0){
+            i = 0;
         }
-        reverse(nums, i + 1, n - 1);
-    }
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
-    }
-    private void reverse(int[] nums, int start, int end) {
-        while (start < end) {
-            swap(nums, start, end);
-            start++;
-            end--;
+        else{
+            while(nums[j] <= nums[i]) j--;
+            temp = nums[j];
+            nums[j] = nums[i];
+            nums[i] = temp;
+            i++;
+            j = nums.length-1;
+        }
+        
+        while(i < j){
+            temp = nums[i];
+            nums[i++] = nums[j];
+            nums[j--] = temp;
         }
     }
 }
-
