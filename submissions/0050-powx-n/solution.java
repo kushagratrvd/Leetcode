@@ -1,19 +1,25 @@
-import java.util.*;
- public class Solution{
- public static double myPow(double x, int n) {
-    double ans = 1.0;
-    long nn = n;
-    if (nn < 0){ nn = -1 * nn;}
-    while(nn > 0){
-      if (nn % 2 == 1) {
-        ans = ans * x;
-        nn = nn - 1;
-      } else {
-        x = x * x;
-        nn = nn / 2;
-      }
+class Solution {
+    public double myPow(double x, int n) {
+        double odd = 1;
+        if(n == Integer.MIN_VALUE){
+            n = n+1;
+            odd = 1/x;
+        }
+        if(n == 0) return 1;
+        boolean flag = false;
+        if(n < 0){
+            flag = true;
+            n*=-1;
+        }
+        while(n > 1){
+            if(n % 2 == 1){
+                odd = odd * x;
+                n = n-1;
+            }
+            x = x*x;
+            n = n/2;
+        }
+        if(flag) return 1/(x*odd);
+        return x * odd;
     }
-    if (n < 0) ans = (double)(1.0) / (double)(ans);
-    return ans;
-  }
- }
+}
